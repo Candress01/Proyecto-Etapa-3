@@ -13,7 +13,15 @@ def mostrar_menu_principal():
     print("5. Consultar inventario")
     print("6. Consultar ventas del dia")
     print("7. Consultar lista de productos")
-    print("8. Salir")
+    print("8. Generar reporte de graficos")
+    print("9. Salir")
+    def mostrar_menu_inventario():
+        print("Menu de inventario:")
+        print("1. Ver inventario completo")
+        print("2. Filtrar inventario")
+        print("3. Ordenar inventario")
+        print("4. Reporte de calidad de datos")
+        print("5. Volver")
 def pedir_opcion_menu():
    # Devuelve lo que el usuario ingresa como opción del menú
    return input("Ingrese una opción: ")
@@ -26,9 +34,9 @@ def pedir_confirmacion(mensaje):
     # Solicita al usuario que responda con Si o no y repite la pregunta hasta que se haga
     while True:
         respuesta = input(mensaje + " (si/no): ").strip().lower()
-        if respuesta == "si"or respuesta =="Si":
+        if respuesta == "si":
             return True
-        elif respuesta == "no"or respuesta =="No":
+        elif respuesta == "no":
             return False
         else:
             mostrar_error("Responder con Si o No")
@@ -60,6 +68,8 @@ def mostrar_inventario(productos,codigos_stock_bajo):
         if fecha =="":
             fecha = "N/A"
         fila = str(p["codigo"]).ljust(10) + str(p["nombre"]).ljust(20) + str(p["categoria"]).ljust(15) + str(p["stock"]).rjust(10) + str(p["stock_minimo"]).rjust(10) + dinero(p["precio_venta"]).rjust(10) + fecha.rjust(15)
+        if p["codigo"] in codigos_stock_bajo:
+            fila += " *"
         print(fila)
     if len(codigos_stock_bajo) > 0:
         print("* = Producto con stock bajo o en un minimo de stock")
@@ -76,6 +86,62 @@ def mostrar_lista_productos(productos):
     for p in productos:
         print(str(p["codigo"]).ljust(10) + str(p["nombre"]).ljust(20) + str(p["categoria"]).ljust(15) + dinero(p["precio_venta"]).rjust(10))
     print("Total de productos: " + str(len(productos)))
+
+    #Filtros y ordenmiento
+
+def mostrar_menu_filtros():
+    print("Filtrar por:")
+    print("1. Categoria")
+    print("2. Rango de precio")
+    print("3. Estado de stock")
+def mostrar_menu_estado_stock():
+    print("Estado de stock:")
+    print("1. Disponible")
+    print("2. Agotado")
+    print("3. Bajo")
+def mostrar_menu_ordenamiento():
+    print("Ordenar por:")
+    print("1. Nombre")
+    print("2. Stock")
+    print("3. Precio")
+def mostrar_menu_orden_direccion():
+    print("1. Ascendente")
+    print("2. Descendente")
+
+    #CALIDAD DE DATOS
+
+def mostrar_productos_marcados(productos):
+    print("")
+    print("Productos marcados para revision:")
+    if len(productos) == 0:
+        print("No hay productos marcados.")
+        return
+    for p in productos:
+        print(str(p["codigo"]) + " " + str(p["nombre"]) + " - " + p["motivo"])
+    if len(productos) == 0:
+        print("No hay productos marcados.")
+        return
+    for p in productos:
+        print(str(p["codigo"]) + " " + str(p["nombre"]) + " - " + p["motivo"])
+    def mostrar_reporte_calidad(reporte):
+        print("")
+        print("Reporte de calidad de datos:")
+        print("Registros leidos: " + str(reporte))
+        print("Registros corregidos: " + str(reporte["corregidos"]))
+        print("Registros desarcados: " + str(reporte["marcados"]))
+        print("Registros marcados: " + str(reporte["marcados"]))
+        if len(reporte["marcados"]) > 0:
+            print("Detalle:")
+            for d in reporte["datelles"]:
+                print("-" + d)
+
+    #Graficos
+def mostrar_menu_graficos():
+    print("Reportes graficos:")
+    print("1. Ventas totales por categoria")
+    print("2. Stock actual vs stock minimo")
+    print("3. Distribucion de ventas por categoria")
+    print("4. Volver")
 
     #VENTAS
 
@@ -114,7 +180,11 @@ def mostrar_ventas_del_dia(ventas):
     for v in ventas:
         print(str(v["numero_factura"]).ljust(10) + str(v["fecha"]).ljust(20) + dinero(v["total_impuestos"]).rjust(15) + dinero(v["total_general"]).rjust(15))
     print("Cantidad de ventas: " + str(len(ventas)))
-    print("Total Acumulado: " + dinero(total_dia))
+def mostrar_resumen_ventas_del_dia(ventas,total_dia):
+    print("")
+    print("Resumen de ventas del día:")
+    print("Total de ventas: " + str(len(ventas)))
+    print("Total acumulado: " + dinero(total_dia))
 
     #ALERTAS
 def mostrar_alertas(alertas):
@@ -130,6 +200,6 @@ def mostrar_alertas(alertas):
             tipo = "Stock en mínimo"
         else:
             tipo = "Vencimiento"
-        print("[" + tipo + "] " + "Producto" + str(a["codigo_producto"]) + ": " + a["mensaje"])
+        print("[" + tipo + "] Producto " + str(a["codigo_producto"]) + ": " + a["mensaje"])
     print("Total de alertas: " + str(len(alertas)))
     
