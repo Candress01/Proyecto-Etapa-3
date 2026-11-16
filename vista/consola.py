@@ -15,13 +15,13 @@ def mostrar_menu_principal():
     print("7. Consultar lista de productos")
     print("8. Generar reporte de graficos")
     print("9. Salir")
-    def mostrar_menu_inventario():
-        print("Menu de inventario:")
-        print("1. Ver inventario completo")
-        print("2. Filtrar inventario")
-        print("3. Ordenar inventario")
-        print("4. Reporte de calidad de datos")
-        print("5. Volver")
+def mostrar_menu_inventario():
+    print("Menu de inventario:")
+    print("1. Ver inventario completo")
+    print("2. Filtrar inventario")
+    print("3. Ordenar inventario")
+    print("4. Reporte de calidad de datos")
+    print("5. Volver")
 def pedir_opcion_menu():
    # Devuelve lo que el usuario ingresa como opción del menú
    return input("Ingrese una opción: ")
@@ -118,21 +118,16 @@ def mostrar_productos_marcados(productos):
         return
     for p in productos:
         print(str(p["codigo"]) + " " + str(p["nombre"]) + " - " + p["motivo"])
-    if len(productos) == 0:
-        print("No hay productos marcados.")
-        return
-    for p in productos:
-        print(str(p["codigo"]) + " " + str(p["nombre"]) + " - " + p["motivo"])
-    def mostrar_reporte_calidad(reporte):
+def mostrar_reporte_calidad(reporte):
         print("")
         print("Reporte de calidad de datos:")
         print("Registros leidos: " + str(reporte))
         print("Registros corregidos: " + str(reporte["corregidos"]))
         print("Registros desarcados: " + str(reporte["marcados"]))
         print("Registros marcados: " + str(reporte["marcados"]))
-        if len(reporte["marcados"]) > 0:
+        if len(reporte["detalles"]) > 0:
             print("Detalle:")
-            for d in reporte["datelles"]:
+            for d in reporte["detalles"]:
                 print("-" + d)
 
     #Graficos
@@ -151,7 +146,7 @@ def mostrar_productos_vendidos(items):
     print("-" * 70)
     for item in items:
         print(str(item["codigo"]).ljust(10) + str(item["nombre"]).ljust(20) + str(item["cantidad"]).rjust(10) + dinero(item["precio_venta"]).rjust(15) + dinero(item["subtotal"]).rjust(15))
-        print("-" * 70)
+print("-" * 70)
 def mostrar__totales(venta):
     print("Subtotal:"+ dinero(venta["subtotal"]))
     print("impuestos(13%):"+ dinero(venta["total_impuestos"]))
