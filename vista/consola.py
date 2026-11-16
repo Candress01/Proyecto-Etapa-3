@@ -132,3 +132,4 @@ def mostrar_alertas(alertas):
             tipo = "Vencimiento"
         print("[" + tipo + "] " + "Producto" + str(a["codigo_producto"]) + ": " + a["mensaje"])
     print("Total de alertas: " + str(len(alertas)))
+    
