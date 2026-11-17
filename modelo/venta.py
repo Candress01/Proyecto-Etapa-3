@@ -1,11 +1,9 @@
 # modelo/venta.py
-# Curso: II1119 Fundamentos para Tecnologías Digitales - Proyecto Integrador Etapa 3
-# Responsabilidad: ventas en memoria, cálculo de impuestos y totales.
-# Regla MVC: aquí NO hay print ni input ni lectura de archivos.
-#
+# ventas en memoria, cálculo de impuestos y totales
+# Regla MVC: aquí no hay print ni input ni lectura de archivos
 # Una venta es un diccionario con estas claves (son las que usa vista/consola.py):
-#   numero_factura, fecha, subtotal, total_impuestos, total_general,
-#   productos_vendidos = lista de items
+# numero_factura, fecha, subtotal, total_impuestos, total_general,
+# productos_vendidos = lista de items
 # Cada item: codigo, nombre, cantidad, precio_venta, subtotal, impuestos, total
 
 from datetime import datetime
