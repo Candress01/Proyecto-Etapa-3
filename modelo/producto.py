@@ -1,7 +1,5 @@
-# modelo/producto.py
-# Curso: II1119 Fundamentos para Tecnologías Digitales - Proyecto Integrador Etapa 3
-# Responsabilidad: catálogo de productos en memoria y sus reglas.
-# Regla MVC: aquí NO hay print ni input ni lectura de archivos.
+# catálogo de productos en memoria y sus reglas
+# aquí no hay print ni input ni lectura de archivos
 # Cada producto es un diccionario con las mismas claves que las columnas de
 # inventario.csv: codigo, nombre, categoria, stock, stock_minimo,
 # precio_compra, precio_venta, fecha_vencimiento.
@@ -10,14 +8,13 @@ import re
 
 catalogo = []   # lista de productos (diccionarios)
 
-# Letras mayúsculas (1 a 3) y 3 números. Ejemplos válidos: L001, B002, PAN001
+# Ejemplos válidos: L001, B002, PAN001
 PATRON_CODIGO = re.compile(r"^[A-Z]{1,3}[0-9]{3}$")
 
 
 def validar_codigo(codigo):
-    # Devuelve (True, "") si el código es válido, o (False, motivo).
-    # Corrección del profesor: el código siempre va en MAYÚSCULA;
-    # si viene en minúscula (por ejemplo "l001" o "l") es un error.
+    # Devuelve (True, "") si el código es valido, o (False, motivo)
+    # si viene en minúscula (por ejemplo "l001" o "l") es un error
     texto = str(codigo).strip()
     if texto == "":
         return False, "El código no puede estar vacío."
@@ -29,7 +26,7 @@ def validar_codigo(codigo):
 
 
 def cargar_catalogo(productos):
-    # Reemplaza el catálogo en memoria (se usa al leer inventario.csv)
+    # Reemplaza el catálogo en memoria al leer inventario.csv)
     catalogo.clear()
     catalogo.extend(productos)
 
@@ -40,8 +37,8 @@ def obtener_productos():
 
 
 def buscar_producto(codigo):
-    # Busca el código EXACTO (sin convertir a mayúscula): "l001" no es "L001".
-    # Devuelve el producto o None si no existe.
+    # Busca el código exacto (sin convertir a mayúscula) "l001" no es "L001"
+    # Devuelve el producto o None si no existe
     texto = str(codigo).strip()
     for p in catalogo:
         if p["codigo"] == texto:
@@ -54,7 +51,7 @@ def existe_codigo(codigo):
 
 
 def agregar_producto(nuevo):
-    # Devuelve False si el código ya existe; True si lo agregó.
+    # Devuelve False si el código ya existe; True si lo agregó
     if existe_codigo(nuevo["codigo"]):
         return False
     if str(nuevo.get("fecha_vencimiento", "")).strip().upper() == "N/A":
