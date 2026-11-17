@@ -1,7 +1,5 @@
-# modelo/persistencia.py
-# Curso: II1119 Fundamentos para Tecnologías Digitales - Proyecto Integrador Etapa 3
-# Responsabilidad: leer y escribir los archivos CSV (inventario.csv y ventas.csv).
-# Regla MVC: aquí NO hay print ni input. Los errores se devuelven como datos
+# leer y escribir los archivos CSV (inventario.csv y ventas.csv)
+# Regla MVC: aquí mno hay print ni input. Los errores se devuelven como datos
 # y es el controlador quien decide qué mostrar.
 
 import csv
@@ -26,10 +24,7 @@ ENCABEZADOS_VENTAS = [
     "subtotal", "impuestos", "total",
 ]
 
-
-# ---------------------------------------------------------------
 # Funciones generales
-# ---------------------------------------------------------------
 
 def asegurar_archivo(ruta, encabezados):
     # Crea el archivo con sus encabezados si no existe (o si está vacío).
@@ -43,8 +38,8 @@ def asegurar_archivo(ruta, encabezados):
 
 
 def leer_filas_crudas(ruta, encabezados):
-    # Devuelve (filas, incidencias). Cada fila es un diccionario con TEXTO
-    # tal como viene en el archivo (sin convertir). Sirve también para el
+    # Devuelve (filas, incidencias), cada fila es un diccionario con texto
+    # como viene en el archivo sin convertir sirve también para el
     # módulo de limpieza de datos.
     # Se lee con utf-8-sig para tolerar archivos guardados desde Excel (con BOM).
     filas = []
@@ -76,10 +71,7 @@ def escribir_csv(ruta, encabezados, filas):
             escritor.writerow(fila)
     os.replace(ruta_temporal, ruta)
 
-
-# ---------------------------------------------------------------
 # Inventario
-# ---------------------------------------------------------------
 
 def _fila_a_producto(fila):
     # Convierte una fila de texto a un producto. Lanza ValueError si hay
@@ -124,10 +116,7 @@ def guardar_inventario(productos):
         ])
     escribir_csv(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO, filas)
 
-
-# ---------------------------------------------------------------
 # Ventas (en el CSV hay una fila por cada producto de la factura)
-# ---------------------------------------------------------------
 
 def _venta_a_filas(una_venta):
     filas = []
@@ -208,10 +197,7 @@ def guardar_ventas(ventas):
         filas.extend(_venta_a_filas(una_venta))
     escribir_csv(RUTA_VENTAS, ENCABEZADOS_VENTAS, filas)
 
-
-# ---------------------------------------------------------------
 # Carga inicial (se llama una sola vez al arrancar el programa)
-# ---------------------------------------------------------------
 
 def cargar_datos_iniciales():
     # Crea los archivos si no existen, lee ambos CSV y llena las listas en
