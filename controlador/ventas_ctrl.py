@@ -104,9 +104,10 @@ def realizar_venta():
 
 
 def consultar_ventas_dia():
-
     del_dia = venta.ventas_del_dia()
-    consola.mostrar_ventas_del_dia(del_dia)
-    if len(del_dia) > 0:
-        total_dia = round(sum(v["total_general"] for v in del_dia), 2)
-        consola.mostrar_resumen_ventas_del_dia(del_dia, total_dia)
+
+    total_dia = round(
+        sum(v["total_general"] for v in del_dia), 2
+    )
+
+    consola.mostrar_ventas_del_dia(del_dia, total_dia)
