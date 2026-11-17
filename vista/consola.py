@@ -232,7 +232,7 @@ def mostrar_ventas_del_dia(ventas,total_dia):
     #ALERTAS
 def mostrar_alertas(alertas):
     print("")
-    print("Alertas de stock:")
+    print("Consultar alerta de stock:")
     if len(alertas) == 0:
         print("No hay alertas de stock.")
         return
