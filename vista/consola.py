@@ -90,7 +90,7 @@ def pedir_confirmacion(mensaje):
     # Solicita al usuario que responda con Si o no y repite la pregunta hasta que se haga
     while True:
         respuesta = input(mensaje + " (si/no): ").strip().lower()
-        if respuesta in "(si or sí)":
+        if respuesta in ("si","si"):
             return True
         elif respuesta == "no":
             return False
@@ -219,8 +219,8 @@ def mostrar_alertas(alertas):
         print("No hay alertas de stock.")
         return
     for a in alertas:
-        if a["tipo_alerta"] in ("Agotado","stock_bajo"):
-            tipo = "Agotado"
+        if a["tipo_alerta"] in ("agotado","stock_bajo"):
+            tipo = "agotado"
         elif a["tipo_alerta"] == "stock_minimo":
             tipo = "Stock en mínimo"
         else:
