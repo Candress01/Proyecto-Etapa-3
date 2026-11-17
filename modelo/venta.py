@@ -1,6 +1,5 @@
-# modelo/venta.py
 # ventas en memoria, cálculo de impuestos y totales
-# Regla MVC: aquí no hay print ni input ni lectura de archivos
+# aquí no hay print ni input ni lectura de archivos
 # Una venta es un diccionario con estas claves (son las que usa vista/consola.py):
 # numero_factura, fecha, subtotal, total_impuestos, total_general,
 # productos_vendidos = lista de items
@@ -11,7 +10,7 @@ from datetime import datetime
 TASA_IMPUESTO = 0.13   # 13 % de IVA
 FORMATO_FECHA = "%Y-%m-%d %H:%M:%S"
 
-ventas = []   # ventas cargadas del CSV + las de esta sesión
+ventas = []  
 
 
 def construir_item(p, cantidad):
@@ -30,7 +29,7 @@ def construir_item(p, cantidad):
 
 
 def generar_numero_factura():
-    # F-0001, F-0002... Toma el número más alto que ya existe (no la cantidad
+    # F-0001, F-0002.. toma el número más alto que ya existe, no la cantidad
     # de ventas) para no repetir facturas después de cargar el CSV.
     mayor = 0
     for v in ventas:
@@ -68,7 +67,7 @@ def obtener_ventas():
 
 
 def ventas_del_dia(fecha=None):
-    # Ventas de una fecha "AAAA-MM-DD" (por defecto, hoy)
+    # Ventas de una fecha "AAAA-MM-DD" (por defecto hoy)
     if fecha is None:
         fecha = datetime.now().strftime("%Y-%m-%d")
     return [v for v in ventas if str(v["fecha"]).startswith(fecha)]
