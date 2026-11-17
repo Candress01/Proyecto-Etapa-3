@@ -1,0 +1,11 @@
+codigo,nombre,categoria,stock,stock_minimo,precio_compra,precio_venta,fecha_vencimiento
+L001,Leche entera 1L,lacteos,4,10,850,1100,2026-10-23
+L002,Yogurt natural 500g,lacteos,25,8,900,1250,2026-10-25
+L003,Queso crema 250g,lacteos,18,6,1100,1500,2026-11-20
+B001,Gaseosa cola 2L,bebidas,40,12,1000,1500,
+B002,Agua embotellada 600ml,bebidas,6,15,400,650,
+B003,Jugo de naranja 1L,bebidas,22,10,950,1350,2027-01-15
+E001,Atun en lata 140g,enlatados,5,10,800,1150,2028-05-01
+E002,Frijoles enlatados 400g,enlatados,30,10,700,990,2028-03-10
+E003,Maiz dulce enlatado 300g,enlatados,8,8,750,1050,2028-06-01
+P001,Pan de molde,panaderia,3,5,1200,1700,2026-10-24
