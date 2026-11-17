@@ -1,9 +1,6 @@
-# controlador/ventas_ctrl.py
-# Curso: II1119 Fundamentos para Tecnologías Digitales - Proyecto Integrador Etapa 3
-# Responsabilidad: orquestar el registro de ventas, la facturación y los impuestos.
-# Regla MVC: el controlador pide datos a la vista, aplica las reglas con el modelo
-# y NO abre archivos directamente (eso lo hace modelo/persistencia.py).
-
+# orquestar el registro de ventas, la facturación y los impuestos
+# el controlador pide datos a la vista, aplica las reglas con el modelo
+# y no abre archivos directamente 
 from modelo import producto, venta, persistencia
 from vista import consola
 
@@ -31,9 +28,9 @@ def _revertir_stock(items_descontados):
 
 
 def realizar_venta():
-    # Funcionalidad: venta en punto de caja.
-    # Fase 1 (bucle): se acumulan los productos en el carrito.
-    # Fase 2 (fuera del bucle): se calculan totales, se confirma y se guarda.
+    # venta en punto de caja
+    # Fase 1 (bucle): se acumulan los productos en el carrito
+    # Fase 2 (fuera del bucle): se calculan totales, se confirma y se guarda
     carrito = []
 
     while True:
@@ -41,8 +38,8 @@ def realizar_venta():
         if codigo.upper() == "FIN":
             break
 
-        # Corrección del profesor: el código va en mayúscula; si hay error en el
-        # código se avisa y se regresa al menú (la venta en curso se cancela).
+        # el código va en mayúscula; si hay error en el
+        # código se avisa y se regresa al menú (la venta en curso se cancela)
         valido, motivo = producto.validar_codigo(codigo)
         if not valido:
             consola.mostrar_error(motivo + " Venta cancelada.")
@@ -82,7 +79,7 @@ def realizar_venta():
         consola.mostrar_error("Venta cancelada. El inventario no sufrió cambios.")
         return
 
-    # Se descuenta el stock; si algo falla se revierte todo
+    # Se descuenta el stock si algo falla se revierte todo
     descontados = []
     for item in resumen["productos_vendidos"]:
         if producto.descontar_stock(item["codigo"], item["cantidad"]):
@@ -92,7 +89,7 @@ def realizar_venta():
             consola.mostrar_error("No se pudo descontar el stock de " + item["codigo"] + ". Venta cancelada.")
             return
 
-    # Se guarda en los CSV; si falla la escritura se revierte el stock
+    # Se guarda en los CSV si falla la escritura se revierte el stock
     try:
         persistencia.guardar_inventario(producto.obtener_productos())
         persistencia.agregar_venta_csv(resumen)
@@ -103,11 +100,11 @@ def realizar_venta():
 
     venta.agregar_venta(resumen)
     consola.mostrar_exito("Venta procesada.")
-    consola.mostrar_facturas(resumen)   # la factura muestra los productos vendidos
+    consola.mostrar_facturas(resumen)  
 
 
 def consultar_ventas_dia():
-    # Funcionalidad: ventas del día
+
     del_dia = venta.ventas_del_dia()
     consola.mostrar_ventas_del_dia(del_dia)
     if len(del_dia) > 0:
