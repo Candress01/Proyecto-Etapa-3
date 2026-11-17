@@ -178,11 +178,19 @@ def mostrar_reporte_calidad(reporte):
     #VENTAS
 
 def mostrar_productos_vendidos(items):
-#Muestra cada producto del carrito
-    print("Codigo".ljust(10) + "Producto".ljust(20) + "Cantidad".rjust(10) + "Precio ".rjust(15) + "Subtotal".rjust(15))
+    # Muestra cada producto del carrito
+    print("Codigo".ljust(10) + "Producto".ljust(20) + "Cantidad".rjust(10) + "Precio".rjust(15) + "Subtotal".rjust(15))
     print("-" * 70)
+
     for item in items:
-        print(str(item["codigo"]).ljust(10) + str(item["nombre"])[:19].ljust(20) + str(item["cantidad"]).rjust(10) + dinero(item["precio_unitario"]).rjust(15) + dinero(item["subtotal"]).rjust(15))
+        print(
+            str(item["codigo"]).ljust(10) +
+            str(item["nombre"])[:19].ljust(20) +
+            str(item["cantidad"]).rjust(10) +
+            dinero(item["precio_venta"]).rjust(15) +
+            dinero(item["subtotal"]).rjust(15)
+        )
+
     print("-" * 70)
 
 def mostrar_totales(venta):
