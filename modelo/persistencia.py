@@ -1,6 +1,6 @@
 # leer y escribir los archivos CSV (inventario.csv y ventas.csv)
-# Regla MVC: aquí mno hay print ni input. Los errores se devuelven como datos
-# y es el controlador quien decide qué mostrar.
+# aquí no hay print ni input, los errores se devuelven como datos
+# y es el controlador que decide qué mostrar
 
 import csv
 import os
@@ -60,7 +60,7 @@ def leer_filas_crudas(ruta, encabezados):
 
 
 def escribir_csv(ruta, encabezados, filas):
-    # Escribe todo el archivo. Primero escribe en un archivo temporal y luego
+    # Escribe todo el archivo, primero escribe en un archivo temporal y luego
     # lo reemplaza, así si algo falla a la mitad no se corrompe el archivo real.
     os.makedirs(os.path.dirname(ruta), exist_ok=True)
     ruta_temporal = ruta + ".tmp"
@@ -74,7 +74,7 @@ def escribir_csv(ruta, encabezados, filas):
 # Inventario
 
 def _fila_a_producto(fila):
-    # Convierte una fila de texto a un producto. Lanza ValueError si hay
+    # Convierte una fila de texto a un producto, lanza ValueError si hay
     # campos vacíos o con formato inválido.
     for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
                   "precio_compra", "precio_venta"):
@@ -94,7 +94,7 @@ def _fila_a_producto(fila):
 
 def leer_inventario():
     # Devuelve (productos, incidencias). Las filas inválidas se saltan
-    # y quedan anotadas en incidencias; el programa no se cae.
+    # y quedan anotadas en incidencias, el programa no se cae
     asegurar_archivo(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     filas, incidencias = leer_filas_crudas(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     productos = []
@@ -129,7 +129,7 @@ def _venta_a_filas(una_venta):
 
 
 def leer_ventas(nombres_por_codigo=None):
-    # Devuelve (ventas, incidencias). Agrupa las filas por numero_factura.
+    # Devuelve (ventas, incidencias), agrupa las filas por numero_factura
     # nombres_por_codigo (opcional) es un diccionario codigo -> nombre para que
     # las ventas históricas también puedan mostrar el nombre del producto.
     if nombres_por_codigo is None:
@@ -203,7 +203,7 @@ def cargar_datos_iniciales():
     # Crea los archivos si no existen, lee ambos CSV y llena las listas en
     # memoria de producto.py y venta.py.
     # Devuelve un diccionario con el resumen para que el controlador lo muestre:
-    #   productos_cargados, ventas_cargadas, archivos_creados, incidencias
+    #  productos_cargados, ventas_cargadas, archivos_creados, incidencias
     creados = []
     if asegurar_archivo(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO):
         creados.append("inventario.csv")
