@@ -90,7 +90,7 @@ def pedir_confirmacion(mensaje):
     # Solicita al usuario que responda con Si o no y repite la pregunta hasta que se haga
     while True:
         respuesta = input(mensaje + " (si/no): ").strip().lower()
-        if respuesta == "si":
+        if respuesta in "(si or sí)":
             return True
         elif respuesta == "no":
             return False
@@ -148,16 +148,6 @@ def mostrar_lista_productos(productos):
 
     #CALIDAD DE DATOS
 
-def mostrar_productos_marcados(productos):
-    print("")
-    print("Productos marcados para revision:")
-    if len(productos) == 0:
-        print("No hay productos marcados.")
-        return
-    for p in productos:
-        print(str(p["codigo"]) + " " + str(p["nombre"]) + " - " + str(p.get("motivo", "Sin motivo")))
-
-
 def mostrar_reporte_calidad(reporte):
     print("")
     print("Reporte de calidad de datos:")
@@ -182,7 +172,7 @@ def mostrar_productos_vendidos(items):
     print("Codigo".ljust(10) + "Producto".ljust(20) + "Cantidad".rjust(10) + "Precio ".rjust(15) + "Subtotal".rjust(15))
     print("-" * 70)
     for item in items:
-        print(str(item["codigo"]).ljust(10) + str(item["nombre"])[:19].ljust(20) + str(item["cantidad"]).rjust(10) + dinero(item["precio_unitario"]).rjust(15) + dinero(item["subtotal"]).rjust(15))
+        print(str(item["codigo"]).ljust(10) + str(item["nombre"])[:19].ljust(20) + str(item["cantidad"]).rjust(10) + dinero(item["precio_venta"]).rjust(15) + dinero(item["subtotal"]).rjust(15))
     print("-" * 70)
 
 def mostrar_totales(venta):
@@ -229,8 +219,8 @@ def mostrar_alertas(alertas):
         print("No hay alertas de stock.")
         return
     for a in alertas:
-        if a["tipo_alerta"] == "stock_bajo":
-            tipo = "Stock bajo"
+        if a["tipo_alerta"] in ("Agotado","stock_bajo"):
+            tipo = "Agotado"
         elif a["tipo_alerta"] == "stock_minimo":
             tipo = "Stock en mínimo"
         else:
