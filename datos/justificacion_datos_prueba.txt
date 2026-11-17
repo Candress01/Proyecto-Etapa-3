@@ -1,0 +1,20 @@
+Justificación de los datos de prueba sucios
+
+Limpieza y procesamiento de datos.
+
+Método de creación: Datos creados manualmente con fines de prueba.
+Se creó el archivo inventario_pruebasc.csv con registros ficticios que 
+contienen errores intencionales para comprobar el funcionamiento de los
+procesos de limpieza y validación del inventario.
+
+Los errores incluidos son:
+Duplicados: el código A001 aparece dos veces con información compatible, para comprobar la detección y la opción de consolidación.
+Campos vacíos: el producto B002 no tiene nombre y el producto F006 no tiene categoría.
+Cantidades negativas: el producto C003 tiene stock negativo.
+Precio atípico: el producto D004 tiene un precio de venta inferior al precio de compra.
+Código inválido: el producto e005 contiene una letra minúscula en su código.
+Dat numérico inválido: el producto G007 tiene texto en el campo de stock.
+Stock agotado: el producto H008 tiene cantidad cero.
+Fecha vacía o no aplicable: el producto I009 utiliza N/A como fecha de vencimiento.
+Estos datos permiten probar la detección de errores, el manejo de registros incompletos, la identificación de duplicados, la validación de cantidades y precios y la generación del reporte de calidad.
+Los datos son ficticios y no representan productos ni movimientos reales del negocio.
