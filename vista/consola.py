@@ -90,7 +90,7 @@ def pedir_confirmacion(mensaje):
     # Solicita al usuario que responda con Si o no y repite la pregunta hasta que se haga
     while True:
         respuesta = input(mensaje + " (si/no): ").strip().lower()
-        if respuesta in ("si","si"):
+        if respuesta in ("si","sí"):
             return True
         elif respuesta == "no":
             return False
