@@ -76,7 +76,14 @@ def descontar_stock(codigo, cantidad):
     p["stock"] = p["stock"] - cantidad
     return True
 
+def eliminar_producto(codigo):
+    p = buscar_producto(codigo)
 
+    if p is None:
+        return False
+
+    catalogo.remove(p)
+    return True
 def estado_stock(p):
     # "agotado", "bajo" (en el mínimo o por debajo) o "disponible"
     if p["stock"] <= 0:
