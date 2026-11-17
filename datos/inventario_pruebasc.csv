@@ -1,0 +1,11 @@
+codigo,nombre,categoria,stock,stock_minimo,precio_compra,precio_venta,fecha_vencimiento
+A001,Arroz,Granos,20,5,1000,1300,2027-05-10
+A001,Arroz,Granos,15,5,1000,1300,2027-05-10
+B002,,Limpieza,10,3,800,1200,2027-06-15
+C003,Azucar,Granos,-5,2,900,1100,2027-07-20
+D004,Leche,Lacteos,12,4,1500,1200,2027-08-01
+e005,Galletas,Snacks,25,5,500,750,2027-09-10
+F006,Jabon,,8,2,600,900,2027-10-10
+G007,Harina,Granos,abc,3,700,950,2027-11-10
+H008,Aceite,Alimentos,0,2,2000,2500,2027-12-10
+I009,Sal,Granos,10,2,300,450,N/A
