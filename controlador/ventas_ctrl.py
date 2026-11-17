@@ -100,7 +100,7 @@ def realizar_venta():
 
     venta.agregar_venta(resumen)
     consola.mostrar_exito("Venta procesada.")
-    consola.mostrar_facturas(resumen)  
+    consola.mostrar_factura(resumen)
 
 
 def consultar_ventas_dia():
