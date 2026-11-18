@@ -5,7 +5,7 @@ from controlador import reportes_ctrl
 from modelo import producto, persistencia
 from vista import consola
 
-Dias_aviso:vencimiento = 30
+DIAS_AVISO_VENCIMIENTO = 30
 
 def _guardar_inventario():
     """Guarda en el CSV los productos que están en memoria."""
@@ -83,8 +83,7 @@ def registrar_producto():
      if not valida:
          consola.mostrar_error(mensaje)
          return
-  
-      nuevo = {
+         
     nuevo = {
         "codigo": codigo,
         "nombre": nombre,
@@ -102,7 +101,7 @@ def registrar_producto():
             consola.mostrar_exito("Producto registrado correctamente.")
         except OSError as error:
             # Se revierte el registro si no se pudo guardar el archivo.
-            producto.catalogo.remove(codigo)
+            producto.eliminar_producto(codigo)
             consola.mostrar_error("No se pudo guardar el inventario: " + str(error))
     else:
         consola.mostrar_error("No se pudo registrar el producto.")
@@ -178,7 +177,8 @@ def _alerta_vencimiento(p):
           return None
       dias = (vence - datetime.now().date()).days
       if dias < 0:
-          mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."+      elif dias <= DIAS_AVISO_VENCIMIENTO:
+          mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."     
+      elif dias <= DIAS_AVISO_VENCIMIENTO:
           mensaje = "Vence en " + str(dias) + " días (" + p["fecha_vencimiento"] + ")."
       else:
           return None
@@ -208,11 +208,11 @@ def generar_alertas_stock():
                 ),
             })
             
-    alerta = _alerta_vencimiento(p)
-    if alerta is not None:
+     alerta = _alerta_vencimiento(p)
+     if alerta is not None:
          alertas.append(alerta)
 
- return alertas
+     return alertas
 
 def consultar_alertas_stock():
     """Muestra los productos que necesitan reposición."""
