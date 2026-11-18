@@ -76,11 +76,11 @@ def escribir_csv(ruta, encabezados, filas):
 # Inventario
 
 def _fila_a_producto(fila):
-      # Convierte una fila de texto a un producto, lanza ValueError si hay
-      # campos vacíos o con formato inválido.
-      for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
-                    "precio_compra", "precio_venta"):
-          if fila.get(campo) is None or fila[campo].strip() == "":
+# Convierte una fila de texto a un producto, lanza ValueError si hay
+ # campos vacíos o con formato inválido.
+for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
+            "precio_compra", "precio_venta"):
+     if fila.get(campo) is None or fila[campo].strip() == "":
               raise ValueError("campo vacío: " + campo)
       stock = int(float(fila["stock"]))
       stock_minimo = int(float(fila["stock_minimo"]))
