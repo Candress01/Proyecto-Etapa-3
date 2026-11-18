@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="vista"/>
+        <attribute name="authors" value="Dell"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-11-17 10:08:37 p.&#160;m."/>
+        <attribute name="created" value="RGVsbDtERVNLVE9QLUpRT09OOEU7MjAyNi0xMS0xNzswOTozOTozMiBwLsKgbS47MzA5MA=="/>
+        <attribute name="edited" value="RGVsbDtERVNLVE9QLUpRT09OOEU7MjAyNi0xMS0xNzsxMDowNzowMSBwLsKgbS47NDg7RGVsbDtERVNLVE9QLUpRT09OOEU7MjAyNi0xMS0xNzswOTozOTo0NyBwLsKgbS47dmlzdGEuZnByZzs3NDgy"/>
+        <attribute name="edited" value="RGVsbDtERVNLVE9QLUpRT09OOEU7MjAyNi0xMS0xNzsxMDowODozNyBwLsKgbS47MTszMTkx"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="continuar, cantidadVentas, totalProductos, stock, stockMinimo" type="Integer" array="False" size=""/>
+            <declare name="opcion, respuesta, tipoAlerta, etiqueta, opcionGraficos" type="String" array="False" size=""/>
+            <assign variable="continuar" expression="1"/>
+            <while expression="continuar == 1">
+                <output expression="&quot;&quot;" newline="True"/>
+                <output expression="&quot;===&quot;" newline="True"/>
+                <output expression="&quot;Sistema de inventarios y punto de venta&quot;" newline="True"/>
+                <output expression="&quot;1. Registrar producto&quot;" newline="True"/>
+                <output expression="&quot;2. Actualizar stock&quot;" newline="True"/>
+                <output expression="&quot;3. Realizar venta&quot;" newline="True"/>
+                <output expression="&quot;4. Consultar alerta de stock&quot;" newline="True"/>
+                <output expression="&quot;5. Consultar inventario&quot;" newline="True"/>
+                <output expression="&quot;6. Consultar ventas del dia&quot;" newline="True"/>
+                <output expression="&quot;7. Consultar lista de productos&quot;" newline="True"/>
+                <output expression="&quot;8. Generar reporte de graficos&quot;" newline="True"/>
+                <output expression="&quot;9. Salir&quot;" newline="True"/>
+                <output expression="&quot;Ingrese una opcion: &quot;" newline="True"/>
+                <input variable="opcion"/>
+                <if expression="opcion == &quot;1&quot;">
+                    <then>
+                        <output expression="&quot;--- Registrar producto ---&quot;" newline="True"/>
+                        <output expression="&quot;Ingrese el codigo del producto (ejemplo: L001, en MAYUSCULA):&quot;" newline="True"/>
+                        <output expression="&quot;Ingrese nombre, categoria, stock, stock minimo y precios:&quot;" newline="True"/>
+                        <output expression="&quot;Fecha de vencimiento (AAAA-MM-DD o escriba N/A si no aplica):&quot;" newline="True"/>
+                        <output expression="&quot;Correcto: producto registrado.&quot;" newline="True"/>
+                    </then>
+                    <else>
+                        <if expression="opcion == &quot;2&quot;">
+                            <then>
+                                <output expression="&quot;--- Actualizar stock ---&quot;" newline="True"/>
+                                <output expression="&quot;Ingrese el codigo del producto y la cantidad a sumar:&quot;" newline="True"/>
+                                <output expression="&quot;Correcto: stock actualizado.&quot;" newline="True"/>
+                            </then>
+                            <else>
+                                <if expression="opcion == &quot;3&quot;">
+                                    <then>
+                                        <output expression="&quot;--- Realizar venta ---&quot;" newline="True"/>
+                                        <output expression="&quot;Codigo del producto a vender (o FIN para terminar):&quot;" newline="True"/>
+                                        <output expression="&quot;Resumen de la venta (codigo, producto, cantidad, precio, subtotal)&quot;" newline="True"/>
+                                        <output expression="&quot;Subtotal, Impuestos(13%) y TOTAL&quot;" newline="True"/>
+                                        <output expression="&quot;Confirma la venta e impresion de factura? (si/no):&quot;" newline="True"/>
+                                        <input variable="respuesta"/>
+                                        <while expression="respuesta != &quot;si&quot; AND respuesta != &quot;s&#237;&quot; AND respuesta != &quot;no&quot;">
+                                            <output expression="&quot;Error: Responder con Si o No&quot;" newline="True"/>
+                                            <output expression="&quot;Confirma la venta e impresion de factura? (si/no):&quot;" newline="True"/>
+                                            <input variable="respuesta"/>
+                                        </while>
+                                        <if expression="respuesta == &quot;no&quot;">
+                                            <then>
+                                                <output expression="&quot;Error: Venta cancelada. El inventario no sufrio cambios.&quot;" newline="True"/>
+                                            </then>
+                                            <else>
+                                                <output expression="&quot;Correcto: Venta procesada.&quot;" newline="True"/>
+                                                <output expression="&quot;FACTURA con los productos vendidos&quot;" newline="True"/>
+                                            </else>
+                                        </if>
+                                    </then>
+                                    <else>
+                                        <if expression="oopcion == &quot;4&quot;">
+                                            <then>
+                                                <output expression="&quot;Alertas de stock:&quot;" newline="True"/>
+                                                <output expression="&quot;Ingrese el tipo de alerta (agotado, stock_minimo, vencimiento):&quot;" newline="True"/>
+                                                <input variable="tipoAlerta"/>
+                                                <if expression="tipoAlerta == &quot;agotado&quot; OR tipoAlerta == &quot;stock_bajo&quot;">
+                                                    <then>
+                                                        <assign variable="etiqueta" expression="&quot;Agotado&quot;"/>
+                                                    </then>
+                                                    <else>
+                                                        <if expression="tipoAlerta == &quot;stock_minimo&quot;">
+                                                            <then>
+                                                                <assign variable="etiqueta" expression="&quot;Stock en m&#237;nimo&quot;"/>
+                                                            </then>
+                                                            <else>
+                                                                <assign variable="etiqueta" expression="&quot;Vencimiento&quot;"/>
+                                                            </else>
+                                                        </if>
+                                                    </else>
+                                                </if>
+                                                <output expression="&quot;[&quot; &amp; etiqueta &amp; &quot;] Producto: mensaje de la alerta&quot;" newline="True"/>
+                                            </then>
+                                            <else>
+                                                <if expression="opcion == 5">
+                                                    <then>
+                                                        <output expression="&quot;Inventario completo&quot;" newline="True"/>
+                                                        <output expression="&quot;Ingrese el stock actual y el stock minimo del producto:&quot;" newline="True"/>
+                                                        <input variable="stock"/>
+                                                        <input variable="stockMinimo"/>
+                                                        <output expression="&quot;Codigo  Nombre  Categoria  Stock  Minimo  Precio  Vencimiento&quot;" newline="True"/>
+                                                        <if expression="stock &lt;= stockMinimo">
+                                                            <then>
+                                                                <output expression="&quot;Se muestra la fila del producto con *&quot;" newline="True"/>
+                                                                <output expression="&quot;* = Producto con stock bajo o en un minimo de stock&quot;" newline="True"/>
+                                                            </then>
+                                                            <else>
+                                                                <output expression="&quot;Se muestra la fila del producto sin *&quot;" newline="True"/>
+                                                            </else>
+                                                        </if>
+                                                    </then>
+                                                    <else>
+                                                        <if expression="opcion == 6">
+                                                            <then>
+                                                                <output expression="&quot;Ventas del dia:&quot;" newline="True"/>
+                                                                <output expression="&quot;Ingrese la cantidad de ventas realizadas hoy:&quot;" newline="True"/>
+                                                                <input variable="cantidadVentas"/>
+                                                                <if expression="cantidadVentas == 0">
+                                                                    <then>
+                                                                        <output expression="&quot;No se han realizado ventas hoy.&quot;" newline="True"/>
+                                                                    </then>
+                                                                    <else>
+                                                                        <output expression="&quot;Factura  Fecha  Impuestos  Total&quot;" newline="True"/>
+                                                                        <output expression="&quot;Cantidad de ventas: &quot; &amp; cantidadVentas" newline="True"/>
+                                                                        <output expression="&quot;Total ACUMULADO del dia&quot;" newline="True"/>
+                                                                    </else>
+                                                                </if>
+                                                            </then>
+                                                            <else>
+                                                                <if expression="opcion == &quot;7&quot;">
+                                                                    <then>
+                                                                        <output expression="&quot;Lista de productos:&quot;" newline="True"/>
+                                                                        <output expression="&quot;Ingrese el total de productos registrados:&quot;" newline="True"/>
+                                                                        <input variable="totalProductos"/>
+                                                                        <if expression="totalProductos == 0">
+                                                                            <then>
+                                                                                <output expression="&quot;No hay productos registrados.&quot;" newline="True"/>
+                                                                            </then>
+                                                                            <else>
+                                                                                <output expression="&quot;Codigo  Nombre  Categoria  Precio de venta&quot;" newline="True"/>
+                                                                                <output expression="&quot;Total de productos: &quot; &amp; totalProductos" newline="True"/>
+                                                                            </else>
+                                                                        </if>
+                                                                    </then>
+                                                                    <else>
+                                                                        <if expression="opcion == &quot;8&quot;">
+                                                                            <then>
+                                                                                <assign variable="opcionGraficos" expression="&quot;&quot;"/>
+                                                                                <while expression="opcionGraficos !=&quot;4&quot;">
+                                                                                    <output expression="&quot;Reportes graficos:&quot;" newline="True"/>
+                                                                                    <output expression="&quot;1. Ventas totales por categoria&quot;" newline="True"/>
+                                                                                    <output expression="&quot;2. Stock actual vs stock minimo&quot;" newline="True"/>
+                                                                                    <output expression="&quot;3. Distribucion de ventas por categoria&quot;" newline="True"/>
+                                                                                    <output expression="&quot;4. Volver&quot;" newline="True"/>
+                                                                                    <output expression="&quot;Ingrese una opcion: &quot;" newline="True"/>
+                                                                                    <input variable="opcionGraficos"/>
+                                                                                    <if expression="opcionGraficos == &quot;1&quot;">
+                                                                                        <then>
+                                                                                            <output expression="&quot;Se muestra el grafico de barras de ventas por categoria&quot;" newline="True"/>
+                                                                                        </then>
+                                                                                        <else>
+                                                                                            <if expression="opcionGraficos == &quot;2&quot;">
+                                                                                                <then>
+                                                                                                    <output expression="&quot;Se muestra el grafico de stock actual vs minimo&quot;" newline="True"/>
+                                                                                                </then>
+                                                                                                <else>
+                                                                                                    <if expression="opcionGraficos == &quot;3&quot;">
+                                                                                                        <then>
+                                                                                                            <output expression="&quot;Se muestra el grafico de distribucion de ventas&quot;" newline="True"/>
+                                                                                                        </then>
+                                                                                                        <else>
+                                                                                                            <if expression="opcionGraficos != &quot;4&quot;">
+                                                                                                                <then>
+                                                                                                                    <output expression="&quot;Error: Opcion no valida.&quot;" newline="True"/>
+                                                                                                                </then>
+                                                                                                                <else/>
+                                                                                                            </if>
+                                                                                                        </else>
+                                                                                                    </if>
+                                                                                                </else>
+                                                                                            </if>
+                                                                                        </else>
+                                                                                    </if>
+                                                                                </while>
+                                                                            </then>
+                                                                            <else>
+                                                                                <if expression="opcion==&quot;9&quot;">
+                                                                                    <then>
+                                                                                        <output expression="&quot;Programa finalizado.&quot;" newline="True"/>
+                                                                                        <assign variable="continuar" expression="0"/>
+                                                                                    </then>
+                                                                                    <else>
+                                                                                        <output expression="&quot;Error: Opcion no valida.&quot;" newline="True"/>
+                                                                                    </else>
+                                                                                </if>
+                                                                            </else>
+                                                                        </if>
+                                                                    </else>
+                                                                </if>
+                                                            </else>
+                                                        </if>
+                                                    </else>
+                                                </if>
+                                            </else>
+                                        </if>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </while>
+        </body>
+    </function>
+</flowgorithm>
