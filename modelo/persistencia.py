@@ -75,7 +75,7 @@ def escribir_csv(ruta, encabezados, filas):
 
 # Inventario
 
-  def _fila_a_producto(fila):
+def _fila_a_producto(fila):
       # Convierte una fila de texto a un producto, lanza ValueError si hay
       # campos vacíos o con formato inválido.
       for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
@@ -94,10 +94,6 @@ def escribir_csv(ruta, encabezados, filas):
           "codigo": fila["codigo"].strip(),
           "nombre": fila["nombre"].strip(),
           "categoria": fila["categoria"].strip(),
-          "stock": int(float(fila["stock"])),
-          "stock_minimo": int(float(fila["stock_minimo"])),
-          "precio_compra": float(fila["precio_compra"]),
-          "precio_venta": float(fila["precio_venta"]),
           "stock": stock,
           "stock_minimo": stock_minimo,
           "precio_compra": precio_compra,
@@ -111,7 +107,6 @@ def leer_inventario():
     asegurar_archivo(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     filas, incidencias = leer_filas_crudas(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     productos = []
-        codigos_vistos = set()  #
     codigos_vistos = set()
     for fila in filas:
         try:
