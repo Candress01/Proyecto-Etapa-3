@@ -76,30 +76,30 @@ def escribir_csv(ruta, encabezados, filas):
 # Inventario
 
 def _fila_a_producto(fila):
-# Convierte una fila de texto a un producto, lanza ValueError si hay
- # campos vacíos o con formato inválido.
-for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
-            "precio_compra", "precio_venta"):
-     if fila.get(campo) is None or fila[campo].strip() == "":
-              raise ValueError("campo vacío: " + campo)
-      stock = int(float(fila["stock"]))
-      stock_minimo = int(float(fila["stock_minimo"]))
-      precio_compra = float(fila["precio_compra"])
-      precio_venta = float(fila["precio_venta"])
-      if stock < 0 or stock_minimo < 0:
-          raise ValueError("cantidades negativas")
-      if precio_compra < 0 or precio_venta < 0:
-          raise ValueError("precios negativos")
-      return {
-          "codigo": fila["codigo"].strip(),
-          "nombre": fila["nombre"].strip(),
-          "categoria": fila["categoria"].strip(),
-          "stock": stock,
-          "stock_minimo": stock_minimo,
-          "precio_compra": precio_compra,
-          "precio_venta": precio_venta,
-          "fecha_vencimiento": (fila.get("fecha_vencimiento") or "").strip(),
-      }
+    # Convierte una fila de texto a un producto, lanza ValueError si hay
+    # campos vacíos o con formato inválido.
+    for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
+                  "precio_compra", "precio_venta"):
+        if fila.get(campo) is None or fila[campo].strip() == "":
+            raise ValueError("campo vacío: " + campo)
+    stock = int(float(fila["stock"]))
+    stock_minimo = int(float(fila["stock_minimo"]))
+    precio_compra = float(fila["precio_compra"])
+    precio_venta = float(fila["precio_venta"])
+    if stock < 0 or stock_minimo < 0:
+        raise ValueError("cantidades negativas")
+    if precio_compra < 0 or precio_venta < 0:
+        raise ValueError("precios negativos")
+    return {
+        "codigo": fila["codigo"].strip(),
+        "nombre": fila["nombre"].strip(),
+        "categoria": fila["categoria"].strip(),
+        "stock": stock,
+        "stock_minimo": stock_minimo,
+        "precio_compra": precio_compra,
+        "precio_venta": precio_venta,
+        "fecha_vencimiento": (fila.get("fecha_vencimiento") or "").strip(),
+    }
 
 def leer_inventario():
     # Devuelve (productos, incidencias). Las filas inválidas se saltan
