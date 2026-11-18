@@ -223,7 +223,9 @@ def cargar_datos_iniciales():
         creados.append("inventario.csv")
     if asegurar_archivo(RUTA_VENTAS, ENCABEZADOS_VENTAS):
         creados.append("ventas.csv")
-    shutil.copy(RUTA_INVENTARIO, RUTA_INVENTARIO + ".bak")
+    ruta_respaldo = Ruta_inventario + ".bak")
+    if not os.path.exists(ruta_respaldo):
+        shutil.copy(RUTA_INVENTARIO, ruta_respaldo)
 
     productos, incidencias = leer_inventario()
     producto.cargar_catalogo(productos)
