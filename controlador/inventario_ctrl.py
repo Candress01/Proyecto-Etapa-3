@@ -72,12 +72,6 @@ def registrar_producto():
 
     if fecha.upper() == "N/A":
         fecha = ""
-      fecha = consola.pedir_dato(
-          "Fecha de vencimiento (o escriba N/A si no aplica)"
-      ).strip()
-  
-     if fecha.upper() == "N/A":
-          fecha = ""
  
      valida, mensaje = producto.validar_fecha(fecha)
      if not valida:
@@ -207,12 +201,11 @@ def generar_alertas_stock():
                     + ". Stock mínimo: " + str(p["stock_minimo"]) + "."
                 ),
             })
-            
-     alerta = _alerta_vencimiento(p)
-     if alerta is not None:
+        
+    alerta = _alerta_vencimiento(p)
+      if alerta is not None:
          alertas.append(alerta)
-
-     return alertas
+    return alertas
 
 def consultar_alertas_stock():
     """Muestra los productos que necesitan reposición."""
@@ -356,11 +349,11 @@ def ordenar_inventario():
         consola.mostrar_error("Orden seleccionado no válido.")
         return
 
-    productos_ordenados = sorted(
-        productos,
-        key=lambda p: p[campos[campo_opcion]],
-        reverse=(sentido == "2")
-    )
+ def _clave(p):
+        valor = p[campos[campo_opcion]]
+        return valor.lower() if isinstance(valor, str) else valor
+
+    productos_ordenados = sorted(productos, key=_clave, reverse=(sentido == "2"))
 
     codigos_bajo = [
         p["codigo"] for p in productos_ordenados
@@ -387,7 +380,6 @@ def menu_inventario():
         elif opcion == "3":
             ordenar_inventario()
         elif opcion == "4":
-            from controlador import reportes_ctrl
             reportes_ctrl.generar_reporte_calidad()
         elif opcion == "5":
             return
