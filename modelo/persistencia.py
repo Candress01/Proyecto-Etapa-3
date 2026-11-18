@@ -4,6 +4,7 @@
 
 import csv
 import os
+import shutil
 
 from modelo import producto, venta
 
@@ -42,6 +43,7 @@ def leer_filas_crudas(ruta, encabezados):
     # como viene en el archivo sin convertir sirve también para el
     # módulo de limpieza de datos.
     # Se lee con utf-8-sig para tolerar archivos guardados desde Excel (con BOM).
+    asegurar_archivo(ruta, encabezados)
     filas = []
     incidencias = []
     with open(ruta, newline="", encoding="utf-8-sig") as archivo:
@@ -73,24 +75,35 @@ def escribir_csv(ruta, encabezados, filas):
 
 # Inventario
 
-def _fila_a_producto(fila):
-    # Convierte una fila de texto a un producto, lanza ValueError si hay
-    # campos vacíos o con formato inválido.
-    for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
-                  "precio_compra", "precio_venta"):
-        if fila.get(campo) is None or fila[campo].strip() == "":
-            raise ValueError("campo vacío: " + campo)
-    return {
-        "codigo": fila["codigo"].strip(),
-        "nombre": fila["nombre"].strip(),
-        "categoria": fila["categoria"].strip(),
-        "stock": int(fila["stock"]),
-        "stock_minimo": int(fila["stock_minimo"]),
-        "precio_compra": float(fila["precio_compra"]),
-        "precio_venta": float(fila["precio_venta"]),
-        "fecha_vencimiento": (fila.get("fecha_vencimiento") or "").strip(),
-    }
-
+  def _fila_a_producto(fila):
+      # Convierte una fila de texto a un producto, lanza ValueError si hay
+      # campos vacíos o con formato inválido.
+      for campo in ("codigo", "nombre", "categoria", "stock", "stock_minimo",
+                    "precio_compra", "precio_venta"):
+          if fila.get(campo) is None or fila[campo].strip() == "":
+              raise ValueError("campo vacío: " + campo)
+      stock = int(float(fila["stock"]))
+      stock_minimo = int(float(fila["stock_minimo"]))
+      precio_compra = float(fila["precio_compra"])
+      precio_venta = float(fila["precio_venta"])
+      if stock < 0 or stock_minimo < 0:
+          raise ValueError("cantidades negativas")
+      if precio_compra < 0 or precio_venta < 0:
+          raise ValueError("precios negativos")
+      return {
+          "codigo": fila["codigo"].strip(),
+          "nombre": fila["nombre"].strip(),
+          "categoria": fila["categoria"].strip(),
+          "stock": int(float(fila["stock"])),
+          "stock_minimo": int(float(fila["stock_minimo"])),
+          "precio_compra": float(fila["precio_compra"]),
+          "precio_venta": float(fila["precio_venta"]),
+          "stock": stock,
+          "stock_minimo": stock_minimo,
+          "precio_compra": precio_compra,
+          "precio_venta": precio_venta,
+          "fecha_vencimiento": (fila.get("fecha_vencimiento") or "").strip(),
+      }
 
 def leer_inventario():
     # Devuelve (productos, incidencias). Las filas inválidas se saltan
@@ -98,10 +111,16 @@ def leer_inventario():
     asegurar_archivo(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     filas, incidencias = leer_filas_crudas(RUTA_INVENTARIO, ENCABEZADOS_INVENTARIO)
     productos = []
+        codigos_vistos = set()  #
+    codigos_vistos = set()
     for fila in filas:
         try:
-            productos.append(_fila_a_producto(fila))
-        except (ValueError, TypeError) as error:
+            p = _fila_a_producto(fila)
+            if p["codigo"] in codigos_vistos:
+                raise ValueError("código duplicado " + p["codigo"] + " (se conserva el primero)")
+            codigos_vistos.add(p["codigo"])
+            productos.append(p)
+        except (ValueError, TypeError, OverflowError) as error:  # 
             incidencias.append("inventario.csv fila " + str(fila["_numero_fila"])
                                + ": " + str(error))
     return productos, incidencias
@@ -209,6 +228,7 @@ def cargar_datos_iniciales():
         creados.append("inventario.csv")
     if asegurar_archivo(RUTA_VENTAS, ENCABEZADOS_VENTAS):
         creados.append("ventas.csv")
+    shutil.copy(RUTA_INVENTARIO, RUTA_INVENTARIO + ".bak")
 
     productos, incidencias = leer_inventario()
     producto.cargar_catalogo(productos)
