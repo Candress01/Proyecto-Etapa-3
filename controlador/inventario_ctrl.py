@@ -72,12 +72,12 @@ def registrar_producto():
 
     if fecha.upper() == "N/A":
         fecha = ""
- 
-     valida, mensaje = producto.validar_fecha(fecha)
-     if not valida:
-         consola.mostrar_error(mensaje)
-         return
-         
+
+    valida, mensaje = producto.validar_fecha(fecha)
+    if not valida:
+        consola.mostrar_error(mensaje)
+        return
+
     nuevo = {
         "codigo": codigo,
         "nombre": nombre,
@@ -161,27 +161,29 @@ def actualizar_stock():
         existente["stock"] = stock_anterior
         consola.mostrar_error("No se pudo guardar el cambio: " + str(error))
 
+
 def _alerta_vencimiento(p):
-      """Devuelve una alerta si el producto vence pronto o ya venció, si no None."""
-      if p["fecha_vencimiento"] == "":
-          return None
-      try:
-          vence = datetime.strptime(p["fecha_vencimiento"], "%Y-%m-%d").date()
-      except ValueError:
-          return None
-      dias = (vence - datetime.now().date()).days
-      if dias < 0:
-          mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."     
-      elif dias <= DIAS_AVISO_VENCIMIENTO:
-          mensaje = "Vence en " + str(dias) + " días (" + p["fecha_vencimiento"] + ")."
-      else:
-          return None
-      return {"tipo_alerta": "vencimiento", "codigo_producto": p["codigo"], "mensaje": mensaje}
+    """Devuelve una alerta si el producto vence pronto o ya venció, si no None."""
+    if p["fecha_vencimiento"] == "":
+        return None
+    try:
+        vence = datetime.strptime(p["fecha_vencimiento"], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    dias = (vence - datetime.now().date()).days
+    if dias < 0:
+        mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."
+    elif dias <= DIAS_AVISO_VENCIMIENTO:
+        mensaje = "Vence en " + str(dias) + " días (" + p["fecha_vencimiento"] + ")."
+    else:
+        return None
+    return {"tipo_alerta": "vencimiento", "codigo_producto": p["codigo"], "mensaje": mensaje}
+
 
 def generar_alertas_stock():
     """
     Genera alertas para productos agotados o con stock igual o inferior
-    al mínimo establecido.
+    al mínimo establecido, y para productos por vencer o vencidos.
     """
     alertas = []
 
@@ -201,11 +203,14 @@ def generar_alertas_stock():
                     + ". Stock mínimo: " + str(p["stock_minimo"]) + "."
                 ),
             })
-        
-    alerta = _alerta_vencimiento(p)
-      if alerta is not None:
-         alertas.append(alerta)
+
+        # La alerta de vencimiento se revisa para cada producto, dentro del for
+        alerta = _alerta_vencimiento(p)
+        if alerta is not None:
+            alertas.append(alerta)
+
     return alertas
+
 
 def consultar_alertas_stock():
     """Muestra los productos que necesitan reposición."""
@@ -349,7 +354,7 @@ def ordenar_inventario():
         consola.mostrar_error("Orden seleccionado no válido.")
         return
 
- def _clave(p):
+    def _clave(p):
         valor = p[campos[campo_opcion]]
         return valor.lower() if isinstance(valor, str) else valor
 
