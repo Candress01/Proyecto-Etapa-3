@@ -219,7 +219,7 @@ def mostrar_alertas(alertas):
         print("No hay alertas de stock.")
         return
     for a in alertas:
-        if a["tipo_alerta"] in ("Agotado","stock_bajo"):
+        if a["tipo_alerta"] in ("agotado","stock_bajo"):
             tipo = "Agotado"
         elif a["tipo_alerta"] == "stock_minimo":
             tipo = "Stock en mínimo"
