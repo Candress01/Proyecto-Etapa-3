@@ -95,18 +95,21 @@ def realizar_venta():
         persistencia.agregar_venta_csv(resumen)
     except OSError:
         _revertir_stock(descontados)
+        # Si el inventario ya se había guardado con el stock descontado, se vuelve a guardar revertido
+        try:
+            persistencia.guardar_inventario(producto.obtener_productos())
+        except OSError:
+            pass
         consola.mostrar_error("No se pudieron guardar los archivos CSV. Venta cancelada.")
         return
 
     venta.agregar_venta(resumen)
     consola.mostrar_exito("Venta procesada.")
-    consola.mostrar_facturas(resumen)  
+    consola.mostrar_factura(resumen)  
 
 
 def consultar_ventas_dia():
-
+    # Funcionalidad: ventas del día
     del_dia = venta.ventas_del_dia()
-    consola.mostrar_ventas_del_dia(del_dia)
-    if len(del_dia) > 0:
-        total_dia = round(sum(v["total_general"] for v in del_dia), 2)
-        consola.mostrar_resumen_ventas_del_dia(del_dia, total_dia)
+    total_dia = round(sum(v["total_general"] for v in del_dia), 2)
+    consola.mostrar_ventas_del_dia(del_dia, total_dia)

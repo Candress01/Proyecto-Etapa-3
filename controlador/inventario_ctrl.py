@@ -1,8 +1,11 @@
 # controlador/inventario_ctrl.py
 
+from datetime import datetime
+from controlador import reportes_ctrl
 from modelo import producto, persistencia
 from vista import consola
 
+DIAS_AVISO_VENCIMIENTO = 30
 
 def _guardar_inventario():
     """Guarda en el CSV los productos que están en memoria."""
@@ -70,6 +73,11 @@ def registrar_producto():
     if fecha.upper() == "N/A":
         fecha = ""
 
+    valida, mensaje = producto.validar_fecha(fecha)
+    if not valida:
+        consola.mostrar_error(mensaje)
+        return
+
     nuevo = {
         "codigo": codigo,
         "nombre": nombre,
@@ -87,7 +95,7 @@ def registrar_producto():
             consola.mostrar_exito("Producto registrado correctamente.")
         except OSError as error:
             # Se revierte el registro si no se pudo guardar el archivo.
-            producto.catalogo.remove(nuevo)
+            producto.eliminar_producto(codigo)
             consola.mostrar_error("No se pudo guardar el inventario: " + str(error))
     else:
         consola.mostrar_error("No se pudo registrar el producto.")
@@ -154,17 +162,35 @@ def actualizar_stock():
         consola.mostrar_error("No se pudo guardar el cambio: " + str(error))
 
 
+def _alerta_vencimiento(p):
+    """Devuelve una alerta si el producto vence pronto o ya venció, si no None."""
+    if p["fecha_vencimiento"] == "":
+        return None
+    try:
+        vence = datetime.strptime(p["fecha_vencimiento"], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+    dias = (vence - datetime.now().date()).days
+    if dias < 0:
+        mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."
+    elif dias <= DIAS_AVISO_VENCIMIENTO:
+        mensaje = "Vence en " + str(dias) + " días (" + p["fecha_vencimiento"] + ")."
+    else:
+        return None
+    return {"tipo_alerta": "vencimiento", "codigo_producto": p["codigo"], "mensaje": mensaje}
+
+
 def generar_alertas_stock():
     """
     Genera alertas para productos agotados o con stock igual o inferior
-    al mínimo establecido.
+    al mínimo establecido, y para productos por vencer o vencidos.
     """
     alertas = []
 
     for p in producto.obtener_productos():
         if p["stock"] <= 0:
             alertas.append({
-                "tipo_alerta": "stock_bajo",
+                "tipo_alerta": "agotado",
                 "codigo_producto": p["codigo"],
                 "mensaje": "Producto agotado. Stock actual: 0.",
             })
@@ -177,6 +203,11 @@ def generar_alertas_stock():
                     + ". Stock mínimo: " + str(p["stock_minimo"]) + "."
                 ),
             })
+
+        # La alerta de vencimiento se revisa para cada producto, dentro del for
+        alerta = _alerta_vencimiento(p)
+        if alerta is not None:
+            alertas.append(alerta)
 
     return alertas
 
@@ -323,11 +354,11 @@ def ordenar_inventario():
         consola.mostrar_error("Orden seleccionado no válido.")
         return
 
-    productos_ordenados = sorted(
-        productos,
-        key=lambda p: p[campos[campo_opcion]],
-        reverse=(sentido == "2")
-    )
+    def _clave(p):
+        valor = p[campos[campo_opcion]]
+        return valor.lower() if isinstance(valor, str) else valor
+
+    productos_ordenados = sorted(productos, key=_clave, reverse=(sentido == "2"))
 
     codigos_bajo = [
         p["codigo"] for p in productos_ordenados
@@ -354,7 +385,6 @@ def menu_inventario():
         elif opcion == "3":
             ordenar_inventario()
         elif opcion == "4":
-            from controlador import reportes_ctrl
             reportes_ctrl.generar_reporte_calidad()
         elif opcion == "5":
             return

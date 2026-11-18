@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Proceso 1 - Recepcion y Registro de Mercancia"/>
+        <attribute name="authors" value="Distribuidora Industrial del Pacifico S.A. - Proyecto Integrador II1119"/>
+        <attribute name="about" value="Diagrama de flujo del Proceso 1: Recepcion y registro de mercancia en bodega."/>
+        <attribute name="saved" value="2026-11-17 05:10:42 PM"/>
+        <attribute name="created" value="Y2FybG9zY2FtcG9zO01BQ0JPT0stQUlSLURFLTsyMDI2LTA5LTEzOzExOjIxOjQwIFBNOzM1NjM="/>
+        <attribute name="edited" value="Y2FybG9zY2FtcG9zO01BQ0JPT0stQUlSLURFLTsyMDI2LTExLTE3OzA1OjEwOjQyIFBNOzM3OzM3Mjg="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="i, CantidadRecibida, StockMinimo, CantidadArticulos, Omitidos" type="Integer" array="False" size=""/>
+            <declare name="Codigo, Nombre, Categoria, FechaVencimiento" type="String" array="False" size=""/>
+            <declare name="PrecioCompra, PrecioVenta" type="Real" array="False" size=""/>
+            <declare name="CoincideOrden, ProductoExiste" type="Boolean" array="False" size=""/>
+            <declare name="CodigoMayuscula, ErrorCodigo, CodigoValido, FechaValida" type="Boolean" array="False" size=""/>
+            <declare name="j, c" type="Integer" array="False" size=""/>
+            <assign variable="Omitidos" expression="0"/>
+            <output expression="&quot;Ingrese la cantidad de articulos :&quot;" newline="True"/>
+            <input variable="CantidadArticulos"/>
+            <while expression="CantidadArticulos&lt;=0">
+                <output expression="&quot;La cantidad de articulos debe ser un numero entero positivo&quot;" newline="True"/>
+                <output expression="&quot;Ingrese la cantidad de articulos&quot;" newline="True"/>
+                <input variable="CantidadArticulos"/>
+            </while>
+            <for variable="i" start="1" end="cantidadArticulos" direction="inc" step="1">
+                <output expression="&quot;Articulo&quot; &amp; i" newline="True"/>
+                <output expression="&quot;Ingrese el codigo&quot;" newline="True"/>
+                <input variable="Codigo"/>
+                <assign variable="CodigoValido" expression="True"/>
+                <if expression="Len(Codigo) &lt; 4 OR Len (Codigo) &gt; 6">
+                    <then>
+                        <output expression="&quot;Error: el codigo no puede estar vacio&quot;" newline="True"/>
+                        <assign variable="CodigoValido" expression="False"/>
+                    </then>
+                    <else>
+                        <for variable="j" start="0" end="len(Codigo)-1" direction="inc" step="1">
+                            <assign variable="C" expression="ToCode(Char(Codigo, j))"/>
+                            <if expression="(j &lt; Len(Codigo)-3 AND (c &lt; 65 OR c &gt; 90)) OR (j &gt;= Len (Codigo)-3 AND (c &lt; 48 OR c &gt; 57))">
+                                <then>
+                                    <assign variable="CodigoValido" expression="False"/>
+                                </then>
+                                <else/>
+                            </if>
+                        </for>
+                    </else>
+                </if>
+                <if expression="CodigoValido == False">
+                    <then>
+                        <output expression="&quot;Error, codigo invalido use 1 a 3 letras MAYUSCULAS y 3 numeros como en el ejemplo: X002&quot;" newline="True"/>
+                    </then>
+                    <else/>
+                </if>
+                <if expression="CodigoValido">
+                    <then>
+                        <output expression="&quot;El producto esta en la orden de compra?&quot;" newline="True"/>
+                        <input variable="CoincideOrden"/>
+                        <if expression="CoincideOrden">
+                            <then>
+                                <output expression="&quot;Cuantos productos se reciben?&quot;" newline="True"/>
+                                <input variable="CantidadRecibida"/>
+                                <while expression="CantidadRecibida &lt;=0">
+                                    <output expression="&quot;Error: la cantidad debe ser un entero positivo&quot;" newline="True"/>
+                                    <output expression="&quot;Cuantos productos se reciben?&quot;" newline="True"/>
+                                    <input variable="CantidadRecibida"/>
+                                </while>
+                                <output expression="&quot;El producto ya existe en el sistema? &quot;" newline="True"/>
+                                <input variable="ProductoExiste"/>
+                                <if expression="ProductoExiste">
+                                    <then>
+                                        <output expression="&quot;Codigo en el stock: &quot; &amp; codigo" newline="True"/>
+                                        <output expression="&quot;Cantidad agregada al inventario: &quot; &amp; cantidadRecibida" newline="True"/>
+                                    </then>
+                                    <else>
+                                        <output expression="&quot;Registrando nuevo producto...&quot;" newline="True"/>
+                                        <output expression="&quot;Ingrese el nombre del producto:&quot;" newline="True"/>
+                                        <input variable="Nombre"/>
+                                        <while expression="Nombre==&quot;&quot;">
+                                            <output expression="&quot;Error: el nombre es obligatorio&quot;" newline="True"/>
+                                            <output expression="&quot;Ingrese el nombre del producto:&quot;" newline="True"/>
+                                            <input variable="Nombre"/>
+                                        </while>
+                                        <output expression="&quot;Ingrese la categoria:&quot;" newline="True"/>
+                                        <input variable="Categoria"/>
+                                        <while expression="Categoria ==&quot;&quot;">
+                                            <output expression="&quot;Error: la categoria es obligatoria&quot;" newline="True"/>
+                                            <output expression="&quot;Ingrese la categoria:&quot;" newline="True"/>
+                                            <input variable="Categoria"/>
+                                        </while>
+                                        <output expression="&quot;Ingrese el precio de compra:&quot;" newline="True"/>
+                                        <input variable="PrecioCompra"/>
+                                        <while expression="PrecioCompra &lt;= 0">
+                                            <output expression="&quot;Error: el precio debe ser positivo&quot;" newline="True"/>
+                                            <output expression="&quot;Ingrese el precio de compra:&quot;" newline="True"/>
+                                            <input variable="PrecioCompra"/>
+                                        </while>
+                                        <output expression="&quot;Ingrese el precio de venta sugerido:&quot;" newline="True"/>
+                                        <input variable="PrecioVenta"/>
+                                        <while expression="PrecioVenta &lt;= 0">
+                                            <output expression="&quot;Error: el precio debe ser positivo&quot;" newline="True"/>
+                                            <output expression="&quot;Ingrese el precio de venta sugerido:&quot;" newline="True"/>
+                                            <input variable="PrecioVenta"/>
+                                        </while>
+                                        <output expression="&quot;Ingrese el stock minimo&quot;" newline="True"/>
+                                        <input variable="Stockminimo"/>
+                                        <while expression="StockMinimo &lt;= 0">
+                                            <output expression="&quot;el stock minimo debe ser un entero positivo&quot;" newline="True"/>
+                                            <output expression="&quot;Ingrese el stock minimo&quot;" newline="True"/>
+                                            <input variable="StockMinimo"/>
+                                        </while>
+                                        <assign variable="FechaValida" expression="False"/>
+                                        <while expression="FechaValida==False">
+                                            <output expression="&quot;Escriba la fecha de vencimiento (AAAA-MM-DD) o escriba N/A si no aplica&quot;" newline="True"/>
+                                            <input variable="FechaVencimiento"/>
+                                            <if expression="FechaVencimiento == &quot;&quot; OR FechaVencimiento == &quot;N/ A&quot; OR FechaVencimiento == &quot;n/a&quot;">
+                                                <then>
+                                                    <assign variable="FechaValida" expression="True"/>
+                                                </then>
+                                                <else>
+                                                    <if expression="Len(FechaVencimiento) == 10">
+                                                        <then>
+                                                            <if expression="Char(FechaVencimiento, 4) == &quot;-&quot; AND Char (FechaVencimiento, 7) == &quot;-&quot;">
+                                                                <then>
+                                                                    <assign variable="FechaValida" expression="True"/>
+                                                                </then>
+                                                                <else>
+                                                                    <output expression="&quot;Error,formato de fecha invalido. Use AAAA-MM -DD (ejemplo: 2001-12-22)&quot;" newline="True"/>
+                                                                </else>
+                                                            </if>
+                                                        </then>
+                                                        <else>
+                                                            <output expression="&quot;Error,formato de fecha invalido. Use AAAA-MM -DD,ejemplo: 2030-04-23&quot;" newline="True"/>
+                                                        </else>
+                                                    </if>
+                                                </else>
+                                            </if>
+                                        </while>
+                                        <if expression="FechaVencimiento == &quot;N/A&quot; OR FechaVencimiento == &quot;n/a&quot;">
+                                            <then>
+                                                <assign variable="FechaVencimiento" expression="&quot;&quot;"/>
+                                            </then>
+                                            <else/>
+                                        </if>
+                                        <output expression="&quot;Nuevo registro creado: &quot; &amp; Nombre" newline="True"/>
+                                        <output expression="&quot;Stock inicial: &quot; &amp; CantidadRecibida" newline="True"/>
+                                        <output expression="&quot;Producto guardado en inventario.csv&quot;" newline="True"/>
+                                        <output expression="&quot;Producto registrado correctamente&quot;" newline="True"/>
+                                    </else>
+                                </if>
+                            </then>
+                            <else>
+                                <output expression="&quot;El producto no se recibe&quot;" newline="True"/>
+                                <assign variable="Omitidos" expression="Omitidos + 1"/>
+                            </else>
+                        </if>
+                    </then>
+                    <else>
+                        <output expression="&quot;Articulo omitido por un codigo invalido,continua con el siguiente.&quot;" newline="True"/>
+                        <assign variable="Omitidos" expression="Omitidos + 1"/>
+                    </else>
+                </if>
+            </for>
+            <output expression="&quot;Total de productos: &quot; &amp; cantidadArticulos" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

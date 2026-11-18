@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Consultar Alerta de Stock"/>
+        <attribute name="authors" value="Estudiante"/>
+        <attribute name="about" value="Proceso 3: Consultar alerta de stock (stock bajo, stock en minimo) y alertas de vencimiento"/>
+        <attribute name="saved" value="2026-11-17 02:36:27 p.&#160;m."/>
+        <attribute name="created" value="VVNFUjtQQy1KQVJWSVNWT0xULTE7MjAyNi0xMC0xODswODo1Nzo0MCBwLsKgbS47Mjk5Nw=="/>
+        <attribute name="edited" value="VVNFUjtQQy1KQVJWSVNWT0xULTE7MjAyNi0xMS0xNzswMjozNjoyNyBwLsKgbS47MjszMTAy"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="totalProductos, i, stockActual, stockMinimo, cantidadSugerida, diasParaVencer, totalAlertas" type="Integer" array="False" size=""/>
+            <declare name="codigo, nombre, fechaVencimiento, mensaje, tipoAlerta, etiqueta" type="String" array="False" size=""/>
+            <declare name="alertasCodigo" type="String" array="True" size="100"/>
+            <declare name="alertasTipo" type="String" array="True" size="100"/>
+            <declare name="alertasMensaje" type="String" array="True" size="100"/>
+            <assign variable="totalAlertas" expression="0"/>
+            <output expression="&quot;CONSULTAR ALERTA DE STOCK&quot;" newline="True"/>
+            <output expression="&quot;Ingrese el total de productos del inventario:&quot;" newline="True"/>
+            <input variable="totalProductos"/>
+            <for variable="i" start="1" end="totalProductos" direction="inc" step="1">
+                <output expression="&quot;--- Producto &quot; &amp; i &amp; &quot; ---&quot;" newline="True"/>
+                <output expression="&quot;Ingrese el codigo del producto:&quot;" newline="True"/>
+                <input variable="codigo"/>
+                <output expression="&quot;Ingrese el nombre del producto:&quot;" newline="True"/>
+                <input variable="nombre"/>
+                <output expression="&quot;Ingrese el stock actual:&quot;" newline="True"/>
+                <input variable="stockActual"/>
+                <output expression="&quot;Ingrese el stock minimo:&quot;" newline="True"/>
+                <input variable="stockMinimo"/>
+                <output expression="&quot;Ingrese la fecha de vencimiento (deje vacio si no aplica):&quot;" newline="True"/>
+                <input variable="fechaVencimiento"/>
+                <if expression="stockActual &lt;= stockMinimo">
+                    <then>
+                        <assign variable="cantidadSugerida" expression="stockMinimo * 2 - stockActual"/>
+                        <if expression="stockActual &lt; stockMinimo">
+                            <then>
+                                <assign variable="tipoAlerta" expression="&quot;stock_bajo&quot;"/>
+                                <assign variable="etiqueta" expression="&quot;[ALERTA DE STOCK BAJO] &quot;"/>
+                            </then>
+                            <else>
+                                <assign variable="tipoAlerta" expression="&quot;stock_minimo&quot;"/>
+                                <assign variable="etiqueta" expression="&quot;[ALERTA DE STOCK EN MINIMO] &quot;"/>
+                            </else>
+                        </if>
+                        <assign variable="mensaje" expression="&quot;C&#243;digo: &quot; &amp; codigo &amp; &quot; | Nombre: &quot; &amp; nombre &amp; &quot; | Actual: &quot; &amp; stockActual &amp; &quot; | Minimo: &quot; &amp; stockMinimo &amp; &quot; | Sugerido: &quot; &amp; cantidadSugerida"/>
+                        <assign variable="totalAlertas" expression="totalAlertas + 1"/>
+                        <assign variable="alertasCodigo[totalAlertas]" expression="codigo"/>
+                        <assign variable="alertasTipo[totalAlertas]" expression="tipoAlerta"/>
+                        <assign variable="alertasMensaje[totalAlertas]" expression="mensaje"/>
+                        <output expression="&quot;&quot; &amp; etiqueta &amp; mensaje" newline="True"/>
+                    </then>
+                    <else/>
+                </if>
+                <if expression="fechaVencimiento != &quot;&quot;">
+                    <then>
+                        <output expression="&quot;Ingrese los dias faltantes para la fecha de vencimiento:&quot;" newline="True"/>
+                        <input variable="diasParaVencer"/>
+                        <if expression="diasParaVencer &lt;= 7">
+                            <then>
+                                <assign variable="mensaje" expression="&quot;C&#243;digo: &quot; &amp; codigo &amp; &quot; | Nombre: &quot; &amp; nombre &amp; &quot; | Vence en: &quot; &amp; diasParaVencer &amp; &quot; dias.&quot;"/>
+                                <assign variable="totalAlertas" expression="totalAlertas + 1"/>
+                                <assign variable="alertasCodigo[totalAlertas]" expression="codigo"/>
+                                <assign variable="alertasTipo[totalAlertas]" expression="&quot;vencimiento_proximo&quot;"/>
+                                <assign variable="alertasMensaje[totalAlertas]" expression="mensaje"/>
+                                <output expression="&quot;[ALERTA DE VENCIMIENTO CERCANO] &quot; &amp; mensaje" newline="True"/>
+                            </then>
+                            <else/>
+                        </if>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+            <output expression="&quot;Total de alertas: &quot; &amp; totalAlertas" newline="True"/>
+            <output expression="&quot;Regresando al menu principal...&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>
