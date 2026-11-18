@@ -1,8 +1,11 @@
 # controlador/inventario_ctrl.py
 
+from datetime import datetime
+from controlador import reportes_ctrl
 from modelo import producto, persistencia
 from vista import consola
 
+Dias_aviso:vencimiento = 30
 
 def _guardar_inventario():
     """Guarda en el CSV los productos que están en memoria."""
@@ -69,7 +72,19 @@ def registrar_producto():
 
     if fecha.upper() == "N/A":
         fecha = ""
-
+      fecha = consola.pedir_dato(
+          "Fecha de vencimiento (o escriba N/A si no aplica)"
+      ).strip()
+  
+     if fecha.upper() == "N/A":
+          fecha = ""
+ 
+     valida, mensaje = producto.validar_fecha(fecha)
+     if not valida:
+         consola.mostrar_error(mensaje)
+         return
+  
+      nuevo = {
     nuevo = {
         "codigo": codigo,
         "nombre": nombre,
@@ -87,7 +102,7 @@ def registrar_producto():
             consola.mostrar_exito("Producto registrado correctamente.")
         except OSError as error:
             # Se revierte el registro si no se pudo guardar el archivo.
-            producto.catalogo.remove(nuevo)
+            producto.catalogo.remove(codigo)
             consola.mostrar_error("No se pudo guardar el inventario: " + str(error))
     else:
         consola.mostrar_error("No se pudo registrar el producto.")
@@ -153,6 +168,21 @@ def actualizar_stock():
         existente["stock"] = stock_anterior
         consola.mostrar_error("No se pudo guardar el cambio: " + str(error))
 
+def _alerta_vencimiento(p):
+      """Devuelve una alerta si el producto vence pronto o ya venció, si no None."""
+      if p["fecha_vencimiento"] == "":
+          return None
+      try:
+          vence = datetime.strptime(p["fecha_vencimiento"], "%Y-%m-%d").date()
+      except ValueError:
+          return None
+      dias = (vence - datetime.now().date()).days
+      if dias < 0:
+          mensaje = "Producto vencido desde " + p["fecha_vencimiento"] + "."+      elif dias <= DIAS_AVISO_VENCIMIENTO:
+          mensaje = "Vence en " + str(dias) + " días (" + p["fecha_vencimiento"] + ")."
+      else:
+          return None
+      return {"tipo_alerta": "vencimiento", "codigo_producto": p["codigo"], "mensaje": mensaje}
 
 def generar_alertas_stock():
     """
@@ -164,7 +194,7 @@ def generar_alertas_stock():
     for p in producto.obtener_productos():
         if p["stock"] <= 0:
             alertas.append({
-                "tipo_alerta": "stock_bajo",
+                "tipo_alerta": "agotado",
                 "codigo_producto": p["codigo"],
                 "mensaje": "Producto agotado. Stock actual: 0.",
             })
@@ -177,9 +207,12 @@ def generar_alertas_stock():
                     + ". Stock mínimo: " + str(p["stock_minimo"]) + "."
                 ),
             })
+            
+    alerta = _alerta_vencimiento(p)
+    if alerta is not None:
+         alertas.append(alerta)
 
-    return alertas
-
+ return alertas
 
 def consultar_alertas_stock():
     """Muestra los productos que necesitan reposición."""
