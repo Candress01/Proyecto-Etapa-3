@@ -4,6 +4,7 @@
 # inventario.csv: codigo, nombre, categoria, stock, stock_minimo,
 # precio_compra, precio_venta, fecha_vencimiento.
 
+from datetime import datetime
 import re
 
 catalogo = []   # lista de productos (diccionarios)
@@ -67,6 +68,24 @@ def aumentar_stock(codigo, cantidad):
     p["stock"] = p["stock"] + cantidad
     return True
 
+def eliminar_producto(codigo):
+    # Quita un producto del catálogo. Devuelve True si existía.
+    p = buscar_producto(codigo)
+    if p is None:
+        return False
+    catalogo.remove(p)
+    return True
+
+def validar_fecha(texto):
+    # Devuelve (True, "") si la fecha está vacía o es AAAA-MM-DD válida
+    texto = str(texto).strip()
+    if texto == "":
+        return True, ""
+    try:
+        datetime.strptime(texto, "%Y-%m-%d")
+        return True, ""
+    except ValueError:
+        return False, "La fecha debe tener el formato AAAA-MM-DD (ejemplo: 2026-12-31)."
 
 def descontar_stock(codigo, cantidad):
     # False si no existe, si la cantidad no es positiva o si no alcanza el stock
