@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Archivos que crea el programa al ejecutarse
+*.bak
+*.tmp
